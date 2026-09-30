@@ -39,7 +39,11 @@ typedef struct s_simulation
 	pthread_cond_t	stop_condition;
 }	t_simulation;
 
+void	log_state(t_simulation *sim, int coder_id, const char *message);
+void	log_burnout(t_simulation *sim, int coder_id);
 int		parse_arguments(int argc, char **argv, t_config *config);
+int		init_simulation(t_simulation *sim, const t_config *config);
+void	destroy_simulation(t_simulation *sim);
 long	get_time_ms(void);
 long	get_elapsed_ms(t_simulation *sim);
 int		simulation_stopped(t_simulation *sim);

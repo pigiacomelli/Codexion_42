@@ -8,7 +8,9 @@ SOURCES = \
 	src/main.c \
 	src/parsing/parse_arguments.c \
 	src/time/time.c \
-	src/simulation/simulation_state.c
+	src/simulation/simulation_state.c \
+	src/simulation/init_simulation.c \
+	src/log/log.c
 
 OBJECTS = $(SOURCES:%.c=build/%.o)
 
