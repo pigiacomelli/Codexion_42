@@ -46,6 +46,7 @@ int		init_simulation(t_simulation *sim, const t_config *config);
 void	destroy_simulation(t_simulation *sim);
 long	get_time_ms(void);
 long	get_elapsed_ms(t_simulation *sim);
+int		interruptible_sleep(t_simulation *sim, long duration_ms);
 int		simulation_stopped(t_simulation *sim);
 void	stop_simulation(t_simulation *sim, t_stop_reason reason);
 
