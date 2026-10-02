@@ -6,5 +6,7 @@
 !include/**
 !src/
 !src/**
+!tests/
+!tests/**
 
 *.gch

@@ -2,6 +2,7 @@
 # define CODEXION_H
 
 # include <pthread.h>
+# include <stddef.h>
 
 typedef enum e_scheduler
 {
@@ -39,6 +40,37 @@ typedef struct s_simulation
 	pthread_cond_t	stop_condition;
 }	t_simulation;
 
+typedef enum e_request_state
+{
+	REQUEST_PENDING,
+	REQUEST_GRANTED,
+	REQUEST_CANCELLED
+}	t_request_state;
+
+typedef struct s_request
+{
+	int				coder_id;
+	unsigned long	sequence;
+	long			deadline;
+	t_request_state	state;
+}	t_request;
+
+typedef struct s_heap
+{
+	t_request	**requests;
+	size_t		size;
+	size_t		capacity;
+	t_scheduler	scheduler;
+}	t_heap;
+
+int		request_has_fifo_priority(const t_request *first,
+			const t_request *second);
+int		request_has_edf_priority(const t_request *first,
+			const t_request *second);
+int		request_has_priority(const t_request *first,
+			const t_request *second, t_scheduler scheduler);
+int		heap_init(t_heap *heap, size_t capacity, t_scheduler scheduler);
+void	heap_destroy(t_heap *heap);
 void	log_state(t_simulation *sim, int coder_id, const char *message);
 void	log_burnout(t_simulation *sim, int coder_id);
 int		parse_arguments(int argc, char **argv, t_config *config);
