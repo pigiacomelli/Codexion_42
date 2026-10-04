@@ -12,6 +12,7 @@ SOURCES = \
 	src/simulation/simulation_state.c \
 	src/simulation/init_simulation.c \
 	src/heap/heap.c \
+	src/heap/heap_pop.c \
 	src/heap/heap_compare.c \
 	src/log/log.c
 
@@ -37,7 +38,8 @@ fclean: clean
 
 re: fclean all
 
-test_heap_compare: src/heap/heap.c src/heap/heap_compare.c \
+test_heap_compare: src/heap/heap.c src/heap/heap_pop.c \
+		src/heap/heap_compare.c \
 		tests/test_heap_compare.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $^ -o $(HEAP_TEST)
 	./$(HEAP_TEST)

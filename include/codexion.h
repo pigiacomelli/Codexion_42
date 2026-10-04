@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   codexion.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pigiacom <pietrogiacomelli8@gmail.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/28 10:00:00 by pigiacom          #+#    #+#             */
+/*   Updated: 2026/10/04 16:16:07 by pigiacom         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CODEXION_H
 # define CODEXION_H
 
@@ -63,23 +75,26 @@ typedef struct s_heap
 	t_scheduler	scheduler;
 }	t_heap;
 
-int		request_has_fifo_priority(const t_request *first,
-			const t_request *second);
-int		request_has_edf_priority(const t_request *first,
-			const t_request *second);
-int		request_has_priority(const t_request *first,
-			const t_request *second, t_scheduler scheduler);
-int		heap_init(t_heap *heap, size_t capacity, t_scheduler scheduler);
-void	heap_destroy(t_heap *heap);
-void	log_state(t_simulation *sim, int coder_id, const char *message);
-void	log_burnout(t_simulation *sim, int coder_id);
-int		parse_arguments(int argc, char **argv, t_config *config);
-int		init_simulation(t_simulation *sim, const t_config *config);
-void	destroy_simulation(t_simulation *sim);
-long	get_time_ms(void);
-long	get_elapsed_ms(t_simulation *sim);
-int		interruptible_sleep(t_simulation *sim, long duration_ms);
-int		simulation_stopped(t_simulation *sim);
-void	stop_simulation(t_simulation *sim, t_stop_reason reason);
+int			request_has_fifo_priority(const t_request *first,
+				const t_request *second);
+int			request_has_edf_priority(const t_request *first,
+				const t_request *second);
+int			request_has_priority(const t_request *first,
+				const t_request *second, t_scheduler scheduler);
+int			heap_init(t_heap *heap, size_t capacity, t_scheduler scheduler);
+void		heap_destroy(t_heap *heap);
+int			heap_push(t_heap *heap, t_request *request);
+t_request	*heap_peek(const t_heap *heap);
+t_request	*heap_pop(t_heap *heap);
+void		log_state(t_simulation *sim, int coder_id, const char *message);
+void		log_burnout(t_simulation *sim, int coder_id);
+int			parse_arguments(int argc, char **argv, t_config *config);
+int			init_simulation(t_simulation *sim, const t_config *config);
+void		destroy_simulation(t_simulation *sim);
+long		get_time_ms(void);
+long		get_elapsed_ms(t_simulation *sim);
+int			interruptible_sleep(t_simulation *sim, long duration_ms);
+int			simulation_stopped(t_simulation *sim);
+void		stop_simulation(t_simulation *sim, t_stop_reason reason);
 
 #endif
