@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "codexion.h"
+#include "heap_internal.h"
 
 #include <stdlib.h>
 
@@ -68,24 +68,6 @@ static int	heap_grow(t_heap *heap)
 	heap->requests = new_requests;
 	heap->capacity = new_capacity;
 	return (0);
-}
-
-static void	heap_sift_up(t_heap *heap, size_t index)
-{
-	t_request	*temporary;
-	size_t		parent_index;
-
-	while (index > 0)
-	{
-		parent_index = (index - 1) / 2;
-		if (!request_has_priority(heap->requests[index],
-				heap->requests[parent_index], heap->scheduler))
-			break ;
-		temporary = heap->requests[index];
-		heap->requests[index] = heap->requests[parent_index];
-		heap->requests[parent_index] = temporary;
-		index = parent_index;
-	}
 }
 
 int	heap_push(t_heap *heap, t_request *request)

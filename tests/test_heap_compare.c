@@ -15,6 +15,9 @@
 #include <assert.h>
 #include <stdio.h>
 
+void	test_heap_remove_sift_up(void);
+void	test_heap_stress(void);
+
 static void	test_comparisons(void)
 {
 	t_request	first;
@@ -37,8 +40,10 @@ static void	test_comparisons(void)
 
 static void	test_heap_lifecycle(void)
 {
-	t_heap	heap;
+	t_request	request;
+	t_heap		heap;
 
+	request = (t_request){1, 10, 100, REQUEST_PENDING};
 	assert(heap_init(&heap, 4, SCHEDULER_FIFO) == 0);
 	assert(heap.requests != NULL);
 	assert(heap.size == 0);
@@ -46,6 +51,8 @@ static void	test_heap_lifecycle(void)
 	assert(heap.scheduler == SCHEDULER_FIFO);
 	assert(heap_peek(&heap) == NULL);
 	assert(heap_pop(&heap) == NULL);
+	assert(heap_push(&heap, &request) == 0);
+	assert(heap_remove(&heap, &request) == 0 && heap.size == 0);
 	heap_destroy(&heap);
 	assert(heap.requests == NULL);
 	assert(heap.size == 0);
@@ -70,8 +77,9 @@ static void	test_fifo_heap(void)
 	assert(heap_push(&heap, &requests[3]) == 0);
 	assert(heap.size == 4 && heap.capacity == 4);
 	assert(heap_peek(&heap)->sequence == 10 && heap.size == 4);
+	assert(heap_remove(&heap, &requests[3]) == 0 && heap.size == 3);
+	assert(heap_remove(&heap, &requests[3]) == 1);
 	assert(heap_pop(&heap)->sequence == 10);
-	assert(heap_pop(&heap)->sequence == 20);
 	assert(heap_pop(&heap)->sequence == 30);
 	assert(heap_pop(&heap)->sequence == 40);
 	assert(heap_pop(&heap) == NULL && heap_peek(&heap) == NULL);
@@ -95,7 +103,7 @@ static void	test_edf_heap(void)
 	assert(heap_push(&heap, &requests[3]) == 0);
 	assert(heap_push(&heap, &requests[4]) == 0);
 	assert(heap.size == 5 && heap.capacity == 8);
-	assert(heap_pop(&heap) == &requests[4]);
+	assert(heap_remove(&heap, &requests[4]) == 0 && heap.size == 4);
 	assert(heap_pop(&heap) == &requests[3]);
 	assert(heap_pop(&heap) == &requests[1]);
 	assert(heap_pop(&heap) == &requests[0]);
@@ -110,6 +118,8 @@ int	main(void)
 	test_heap_lifecycle();
 	test_fifo_heap();
 	test_edf_heap();
+	test_heap_remove_sift_up();
+	test_heap_stress();
 	printf("heap tests: OK\n");
 	return (0);
 }

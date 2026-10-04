@@ -13,6 +13,7 @@ SOURCES = \
 	src/simulation/init_simulation.c \
 	src/heap/heap.c \
 	src/heap/heap_pop.c \
+	src/heap/heap_order.c \
 	src/heap/heap_compare.c \
 	src/log/log.c
 
@@ -25,6 +26,9 @@ $(NAME): $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $(NAME)
 
 $(OBJECTS): include/codexion.h
+
+build/src/heap/heap.o build/src/heap/heap_pop.o \
+	build/src/heap/heap_order.o: include/heap_internal.h
 
 build/%.o: %.c
 	@mkdir -p $(dir $@)
@@ -39,8 +43,10 @@ fclean: clean
 re: fclean all
 
 test_heap_compare: src/heap/heap.c src/heap/heap_pop.c \
+		src/heap/heap_order.c \
 		src/heap/heap_compare.c \
-		tests/test_heap_compare.c
+		tests/test_heap_compare.c tests/test_heap_remove.c \
+		tests/test_heap_stress.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $^ -o $(HEAP_TEST)
 	./$(HEAP_TEST)
 

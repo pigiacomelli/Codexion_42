@@ -86,6 +86,7 @@ void		heap_destroy(t_heap *heap);
 int			heap_push(t_heap *heap, t_request *request);
 t_request	*heap_peek(const t_heap *heap);
 t_request	*heap_pop(t_heap *heap);
+int			heap_remove(t_heap *heap, t_request *request);
 void		log_state(t_simulation *sim, int coder_id, const char *message);
 void		log_burnout(t_simulation *sim, int coder_id);
 int			parse_arguments(int argc, char **argv, t_config *config);

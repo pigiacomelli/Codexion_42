@@ -10,38 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "codexion.h"
+#include "heap_internal.h"
 
 #include <stdlib.h>
-
-static void	heap_sift_down(t_heap *heap, size_t index)
-{
-	t_request	*temporary;
-	size_t		left_index;
-	size_t		right_index;
-	size_t		priority_index;
-
-	while (index < heap->size)
-	{
-		left_index = index * 2 + 1;
-		right_index = left_index + 1;
-		priority_index = index;
-		if (left_index < heap->size
-			&& request_has_priority(heap->requests[left_index],
-				heap->requests[priority_index], heap->scheduler))
-			priority_index = left_index;
-		if (right_index < heap->size
-			&& request_has_priority(heap->requests[right_index],
-				heap->requests[priority_index], heap->scheduler))
-			priority_index = right_index;
-		if (priority_index == index)
-			break ;
-		temporary = heap->requests[index];
-		heap->requests[index] = heap->requests[priority_index];
-		heap->requests[priority_index] = temporary;
-		index = priority_index;
-	}
-}
 
 t_request	*heap_peek(const t_heap *heap)
 {
@@ -64,4 +35,49 @@ t_request	*heap_pop(t_heap *heap)
 	if (heap->size > 0)
 		heap_sift_down(heap, 0);
 	return (top_request);
+}
+
+static size_t	heap_find(const t_heap *heap, const t_request *request)
+{
+	size_t	index;
+
+	index = 0;
+	while (index < heap->size && heap->requests[index] != request)
+		index++;
+	return (index);
+}
+
+static void	heap_restore(t_heap *heap, size_t index)
+{
+	size_t	parent_index;
+
+	if (index > 0)
+	{
+		parent_index = (index - 1) / 2;
+		if (request_has_priority(heap->requests[index],
+				heap->requests[parent_index], heap->scheduler))
+		{
+			heap_sift_up(heap, index);
+			return ;
+		}
+	}
+	heap_sift_down(heap, index);
+}
+
+int	heap_remove(t_heap *heap, t_request *request)
+{
+	size_t	index;
+
+	if (heap == NULL || heap->requests == NULL || request == NULL)
+		return (1);
+	index = heap_find(heap, request);
+	if (index == heap->size)
+		return (1);
+	heap->size--;
+	if (index != heap->size)
+		heap->requests[index] = heap->requests[heap->size];
+	heap->requests[heap->size] = NULL;
+	if (index != heap->size)
+		heap_restore(heap, index);
+	return (0);
 }
