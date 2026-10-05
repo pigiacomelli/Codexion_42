@@ -11,6 +11,7 @@ SOURCES = \
 	src/time/interruptible_sleep.c \
 	src/simulation/simulation_state.c \
 	src/simulation/init_simulation.c \
+	src/dongle/dongle_init.c \
 	src/heap/heap.c \
 	src/heap/heap_pop.c \
 	src/heap/heap_order.c \

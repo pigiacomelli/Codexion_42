@@ -6,7 +6,7 @@
 /*   By: pigiacom <pietrogiacomelli8@gmail.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/28 10:00:00 by pigiacom          #+#    #+#             */
-/*   Updated: 2026/10/04 16:16:07 by pigiacom         ###   ########.fr       */
+/*   Updated: 2026/10/05 14:54:59 by pigiacom         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include <pthread.h>
 # include <stddef.h>
+
+typedef struct s_dongle	t_dongle;
 
 typedef enum e_scheduler
 {
@@ -50,6 +52,7 @@ typedef struct s_simulation
 	pthread_mutex_t	state_mutex;
 	pthread_mutex_t	log_mutex;
 	pthread_cond_t	stop_condition;
+	t_dongle		*dongles;
 }	t_simulation;
 
 typedef enum e_request_state
@@ -75,6 +78,16 @@ typedef struct s_heap
 	t_scheduler	scheduler;
 }	t_heap;
 
+struct s_dongle
+{
+	int				id;
+	int				owner_id;
+	long			available_at;
+	pthread_mutex_t	mutex;
+	pthread_cond_t	condition;
+	t_heap			waiting_requests;
+};
+
 int			request_has_fifo_priority(const t_request *first,
 				const t_request *second);
 int			request_has_edf_priority(const t_request *first,
@@ -91,6 +104,8 @@ void		log_state(t_simulation *sim, int coder_id, const char *message);
 void		log_burnout(t_simulation *sim, int coder_id);
 int			parse_arguments(int argc, char **argv, t_config *config);
 int			init_simulation(t_simulation *sim, const t_config *config);
+int			init_dongles(t_simulation *sim);
+void		destroy_dongles(t_simulation *sim);
 void		destroy_simulation(t_simulation *sim);
 long		get_time_ms(void);
 long		get_elapsed_ms(t_simulation *sim);
