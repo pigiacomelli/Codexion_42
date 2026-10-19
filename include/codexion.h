@@ -17,6 +17,7 @@
 # include <stddef.h>
 
 typedef struct s_dongle	t_dongle;
+typedef struct s_coder	t_coder;
 
 typedef enum e_scheduler
 {
@@ -53,6 +54,7 @@ typedef struct s_simulation
 	pthread_mutex_t	log_mutex;
 	pthread_cond_t	stop_condition;
 	t_dongle		*dongles;
+	t_coder			*coders;
 }	t_simulation;
 
 typedef enum e_request_state
@@ -88,6 +90,18 @@ struct s_dongle
 	t_heap			waiting_requests;
 };
 
+struct s_coder
+{
+	int				id;
+	pthread_t		thread;
+	long			last_compile_start;
+	int				compile_count;
+	pthread_mutex_t	mutex;
+	t_dongle		*left_dongle;
+	t_dongle		*right_dongle;
+	t_simulation	*simulation;
+};
+
 int			request_has_fifo_priority(const t_request *first,
 				const t_request *second);
 int			request_has_edf_priority(const t_request *first,
@@ -106,6 +120,8 @@ int			parse_arguments(int argc, char **argv, t_config *config);
 int			init_simulation(t_simulation *sim, const t_config *config);
 int			init_dongles(t_simulation *sim);
 void		destroy_dongles(t_simulation *sim);
+int			init_coders(t_simulation *sim);
+void		destroy_coders(t_simulation *sim);
 void		destroy_simulation(t_simulation *sim);
 long		get_time_ms(void);
 long		get_elapsed_ms(t_simulation *sim);
