@@ -11,10 +11,12 @@ SOURCES = \
 	src/time/interruptible_sleep.c \
 	src/simulation/simulation_state.c \
 	src/simulation/init_simulation.c \
+	src/monitor/monitor.c \
 	src/dongle/dongle_init.c \
 	src/dongle/dongle_access.c \
 	src/coder/coder_init.c \
 	src/coder/coder_thread.c \
+	src/coder/coder_resources.c \
 	src/heap/heap.c \
 	src/heap/heap_pop.c \
 	src/heap/heap_order.c \

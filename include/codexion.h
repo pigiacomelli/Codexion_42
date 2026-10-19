@@ -53,6 +53,7 @@ typedef struct s_simulation
 	pthread_mutex_t	state_mutex;
 	pthread_mutex_t	log_mutex;
 	pthread_cond_t	stop_condition;
+	pthread_t		monitor_thread;
 	t_dongle		*dongles;
 	t_coder			*coders;
 }	t_simulation;
@@ -127,6 +128,10 @@ int			init_coders(t_simulation *sim);
 void		destroy_coders(t_simulation *sim);
 int			start_coders(t_simulation *sim);
 void		join_coders(t_simulation *sim);
+int			start_monitor(t_simulation *sim);
+void		join_monitor(t_simulation *sim);
+int			acquire_dongle_pair(t_coder *coder);
+void		release_dongle_pair(t_coder *coder);
 void		destroy_simulation(t_simulation *sim);
 long		get_time_ms(void);
 long		get_elapsed_ms(t_simulation *sim);

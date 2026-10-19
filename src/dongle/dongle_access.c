@@ -85,7 +85,6 @@ int	acquire_dongle(t_coder *coder, t_dongle *dongle)
 		pthread_mutex_unlock(&dongle->mutex);
 		return (1);
 	}
-	pthread_cond_broadcast(&dongle->condition);
 	while (!request_can_be_granted(dongle, &request))
 	{
 		if (simulation_stopped(coder->simulation))
@@ -99,7 +98,6 @@ int	acquire_dongle(t_coder *coder, t_dongle *dongle)
 		return (cancel_request(coder, dongle, &request, 1));
 	request.state = REQUEST_GRANTED;
 	dongle->owner_id = coder->id;
-	pthread_cond_broadcast(&dongle->condition);
 	pthread_mutex_unlock(&dongle->mutex);
 	log_state(coder->simulation, coder->id, "has taken a dongle");
 	return (0);
