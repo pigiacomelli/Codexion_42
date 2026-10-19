@@ -14,6 +14,14 @@ int	main(int argc, char **argv)
 		destroy_simulation(&simulation);
 		return (1);
 	}
+	if (start_monitor(&simulation) != 0)
+	{
+		stop_simulation(&simulation, STOP_ERROR);
+		join_coders(&simulation);
+		destroy_simulation(&simulation);
+		return (1);
+	}
+	join_monitor(&simulation);
 	join_coders(&simulation);
 	destroy_simulation(&simulation);
 	return (0);
