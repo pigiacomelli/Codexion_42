@@ -20,6 +20,7 @@ static int	init_one_dongle(t_dongle *dongle,
 	dongle->id = (int)index;
 	dongle->owner_id = -1;
 	dongle->available_at = 0;
+	dongle->next_sequence = 0;
 	if (pthread_mutex_init(&dongle->mutex, NULL) != 0)
 		return (1);
 	if (pthread_cond_init(&dongle->condition, NULL) != 0)

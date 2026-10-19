@@ -9,6 +9,12 @@ int	main(int argc, char **argv)
 		return (1);
 	if (init_simulation(&simulation, &config) != 0)
 		return (1);
+	if (start_coders(&simulation) != 0)
+	{
+		destroy_simulation(&simulation);
+		return (1);
+	}
+	join_coders(&simulation);
 	destroy_simulation(&simulation);
 	return (0);
 }
